@@ -22,7 +22,7 @@ char    *read_line(int fd, char *str, char *buffer)
         if (len <= 0)
             break;
         str = ft_strjoin(str, buffer);
-        if (ft_strchr(buffer, '\n'));
+        if (ft_strchr(buffer, '\n'))
             break;
     }
     free(buffer);
@@ -35,7 +35,7 @@ char	*cut_line(char	*str)
 	int		len;
 	char	*temp;
 
-    temp = ft_dupnl(str, '\n');
+    temp = ft_dupnl(str);
 	len_nl = ft_strlen(temp);
 	len = ft_strlen(str);
 	if (len_nl < len - 1)
@@ -51,11 +51,11 @@ char	*cut_line(char	*str)
 	return (str);
 }
 
-char *ft_dupnl(char *str, int c) 
+char *ft_dupnl(char *str) 
 {
     char    *line;
     char    *before;
-    int     i;
+    size_t  i;
     size_t  len;
 
     i = 0;
@@ -82,17 +82,16 @@ char    *get_next_line(int fd)
     static char *str;
     char        *line;
     char        *buffer;
-    int         len;
-    int         i;
 
     if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
+    buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (!buffer)
-        buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+        return (NULL);
     str = read_line(fd, str, buffer);
     if (str)
     {
-        line = ft_dupnl(str, '\n');
+        line = ft_dupnl(str);
         str = cut_line(str);
     }
     return (line);
