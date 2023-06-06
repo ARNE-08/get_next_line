@@ -62,7 +62,13 @@ char *ft_strjoin(char *s1, char *s2)
 
     str[i + j] = '\0';
 
-    free(s1);
+    // printf("\nfree s1! : s1 = %s", s1);
+    if (s1 != NULL)
+    {
+        free(s1);
+        s1 = NULL;
+        // printf("\nalready free s1! : s1 = %s", s1);
+    }
 
     return str;
 }

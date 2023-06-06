@@ -19,22 +19,25 @@ char *read_line(int fd, char *str, char *buffer)
     while (1)
     {
         len = read(fd, buffer, BUFFER_SIZE);
-        // printf("len = %d\n", len);
-        // printf("buffer : %s\n", buffer);
         if (len <= 0)
             break;
 
         buffer[len] = '\0'; // Ensure buffer is null-terminated
 
-        // printf("str before join : %s\n", str);
         str = ft_strjoin(str, buffer);
-        // printf("str after join : %s\n", str);
+
         if (ft_strchr(buffer, '\n'))
             break;
     }
 
-    free(buffer);
-    // printf("str when return : %s\n", str);
+    // printf("\nfree buffer! : buffer = %s", buffer);
+    if (buffer != NULL)
+    {
+        free(buffer);
+        buffer = NULL;
+        // printf("\nalready free buffer! : buffer = %s", buffer);
+    }
+
     return str;
 }
 
@@ -50,13 +53,26 @@ char	*cut_line(char	*str)
 	{
 		temp = str;
 		str = ft_strjoin(NULL, str + len_nl + 1);
-		free(temp);
+        // printf("\nfree temp! : temp = %s", temp);
+        if (temp != NULL)
+        {
+            free(temp);
+            temp = NULL;
+            // printf("\nalready free temp! : temp = %s", temp);
+        }
 	}
 	else
 	{
-		free(str);
+        // printf("\nfree str! : str = %s", str);
+        if (str != NULL)
+        {
+            free(str);
+            str = NULL;
+            // printf("\nalready free str! : str = %s", str);
+        }
 		return (NULL);
 	}
+    // printf("\nnot else str : %s", str);
 	return (str);
 }
 
@@ -73,7 +89,7 @@ char *ft_dupnl(char *str)
     if (!line)
         return str;
 
-    len = line - str;
+    len = line - str +1;
     before = malloc(sizeof(char) * (len + 1));
 
     while (str[i] != '\0' && i < len)
@@ -112,25 +128,24 @@ char *get_next_line(int fd)
         // printf("str : %s\n", str);
     }
 
-    // free(buffer);
     return line;
 }
 
-/* int main(void)
+int main(void)
 {
     int fd;
     char *str;
 
-    fd = open("newwy", O_RDONLY);
-    // printf("%d", fd);
+    fd = open("gnlTester/files/multiple_line_no_nl", O_RDONLY);
+    // fd = open("gnlTester/files/multiple_line_with_nl", O_RDONLY);
 
-    for (int i = 0; i < 10; i++)
-    {
-        str = get_next_line(fd);
-        printf("answer : %s\n", str);
-        free(str);
-    }
+    printf("line 1:%s|", get_next_line(fd));
+    printf("line 2:%s|", get_next_line(fd));
+    printf("line 3:%s|", get_next_line(fd));
+    printf("line 4:%s|", get_next_line(fd));
+    printf("line 5:%s|", get_next_line(fd));
+    printf("line 6:%s|", get_next_line(fd));
     close(fd);
 
     return 0;
-} */
+}
