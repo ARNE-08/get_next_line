@@ -5,71 +5,88 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 13:50:16 by marvin            #+#    #+#             */
-/*   Updated: 2023/06/04 13:50:16 by marvin           ###   ########.fr       */
+/*   Created: 2023/06/06 20:52:39 by marvin            #+#    #+#             */
+/*   Updated: 2023/06/06 20:52:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t  ft_strlen(const char *s)
+size_t	ft_strlen(const char *s, int mode)
 {
-    int i;
+	size_t	i;
 
-    i = 0;
-    while (s[i] != '\0')
-        i++;
-    return (i);
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i] != '\0')
+	{
+		if (mode == 1 && s[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (i);
 }
 
-char    *ft_strjoin(char *s1, char *s2)
+char *ft_strjoin(char *s1, char *s2)
 {
-    char    *str;
-    size_t  len;
+    char *str;
+    size_t len_s1;
+    size_t len_s2;
+    size_t i;
+    size_t j;
 
-    if (!s1 || !s2)
-        return (0);
-    len = ft_strlen(s1) + ft_strlen(s2);
-    str = malloc(sizeof(char) * (len + 1));
+    if (!s1 && !s2)
+        return NULL;
+
+    len_s1 = (s1) ? ft_strlen(s1, 0) : 0;
+    len_s2 = (s2) ? ft_strlen(s2, 0) : 0;
+
+    str = malloc(sizeof(char) * (len_s1 + len_s2 + 1));
     if (!str)
-        return (0);
-    while (*s1)
-        *str++ = *s1++;
-    while (*s2)
-        *str++ = *s2++;
-    *str = '\0';
-    if (s1)
-        free(s1);
-    return (str - len);
-}
-
-char    *ft_strchr(char *s, int c)
-{
-    int i;
-    int len;
+        return NULL;
 
     i = 0;
-    len = ft_strlen(s);
+    j = 0;
+    while (s1 && s1[i] != '\0')
+    {
+        str[i] = s1[i];
+        i++;
+    }
+
+    while (s2 && s2[j] != '\0')
+    {
+        str[i + j] = s2[j];
+        j++;
+    }
+
+    str[i + j] = '\0';
+
+    free(s1);
+
+    return str;
+}
+
+char *ft_strchr(char *s, int c)
+{
+    size_t i = 0;
+    size_t len = ft_strlen(s, 0);
+
     while (s[i] != '\0')
     {
         if (s[i] == (char)c)
         {
             s = s + i;
-            return ((char *)s);
+            return (char *)s;
         }
         i++;
     }
+
     if (c == 0)
     {
         s = s + len;
-        return ((char *)s);
+        return (char *)s;
     }
-    return (0);
+
+    return NULL;
 }
-
-// int main()
-// {
-//     char *s3 = "Hello\nWorld";
-
-//     printf(ft_dupnl(s3, '\n'));
-// }
